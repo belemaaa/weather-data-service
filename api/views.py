@@ -33,4 +33,4 @@ class WeatherData(APIView):
                 }
             })
         else:
-            return Response({'error': 'Could not retrieve weather data'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Could not retrieve weather data'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
