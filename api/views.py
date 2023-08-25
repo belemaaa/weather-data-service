@@ -8,23 +8,21 @@ from .serializers import WeatherSerializer
 
 class WeatherData(APIView):
     def post(self, request):
-        serializer = WeatherSerializer(data=request.data)
-        if serializer.is_valid():
-            city = serializer.validated_data.get('city')
-            if city is None:
-                return Response({'message': 'city field is required.'})
-            
-            api_key = settings.OPENWEATHERMAP_API_KEY
-            response = requests.get('http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric')
-            data = response.json()
+        city = request.data['city']
+        if city is None:
+            return Response({'message': 'city field is required.'})
+        
+        api_key = settings.OPENWEATHERMAP_API_KEY
+        response = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric')
+        data = response.json()
 
-            if response.status_code == 200:
-                return Response({
-                    'weather data': {
-                        'city': data['name'],
-                        'temperature': data['temperature'],
-                        'description': data['description']
-                    }
-                })
-            else:
-                return Response({'error': 'Could not retrieve weather data'}, status=500)
+        if response.status_code == 200:
+            return Response({
+                'weather data': {
+                    'city': data['name'],
+                    'temperature': data['temperature'],
+                    'description': data['description']
+                }
+            })
+        else:
+            return Response({'error': 'Could not retrieve weather data'}, status=500)
