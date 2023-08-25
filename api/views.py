@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.conf import settings
-from .serializers import WeatherSerializer
+
 
 
 class WeatherData(APIView):
@@ -20,8 +20,8 @@ class WeatherData(APIView):
             return Response({
                 'weather data': {
                     'city': data['name'],
-                    'temperature': data['temperature'],
-                    'description': data['description']
+                    'temperature': data['main']['temp'],
+                    'description': data['weather'][0]['description']
                 }
             })
         else:
